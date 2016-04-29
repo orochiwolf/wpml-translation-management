@@ -102,7 +102,7 @@ jQuery(document).ready(function () {
 		return false;
 	});
 
-	jQuery('#icl_side_by_site').find('a[href=#cancel]').click(function () {
+	jQuery('#icl_side_by_site').find('a[href="#cancel"]').click(function () {
 		var anchor = jQuery(this);
 		jQuery.ajax({
 			type: "POST", url: ajaxurl, data: 'action=dismiss_icl_side_by_site',
