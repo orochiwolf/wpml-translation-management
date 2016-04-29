@@ -62,7 +62,7 @@ class WPML_TM_Translate_Independently {
 	public function ajax_disconnect_duplicates() {
 		// Check nonce.
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'icl_disconnect_duplicates' ) ) {
-			wp_send_json_error( esc_html__( 'Failed to disconnected posts', 'wpml-translation-management' ) );
+			wp_send_json_error( esc_html__( 'Failed to disconnect posts', 'wpml-translation-management' ) );
 		}
 
 		// Get post basket post ids.
