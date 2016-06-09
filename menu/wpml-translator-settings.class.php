@@ -223,7 +223,7 @@ class WPML_Translator_Settings extends WPML_WPDB_And_SP_User {
                         }
                         $language_pairs = get_user_meta( $bu->ID, $this->wpdb->prefix . 'language_pairs', true );
                         ?>
-                        <tr<?php echo $trstyle ?>>
+                        <tr>
                             <td class="column-title">
                                 <strong><a class="row-title"
                                            href="<?php echo $edit_link ?>"><?php echo $bu->user_login; ?></a></strong>
