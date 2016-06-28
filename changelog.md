@@ -1,3 +1,11 @@
+# 2.2.1
+
+## Fixes
+* [wpmlcore-3030] Class auto loading is not compatible with version of PHP older than 5.3
+
+## Performances
+* [wpmlga-133] Improved class autoloading by using class mapping, instead of file system lookup
+
 # 2.2.0
 
 ## Fixes
@@ -20,6 +28,7 @@
 
 ## Usability
 * [wpmltm-1442] Improved feedback message when sending jobs to a translation service fails
+* [wpmltm-1408] Improved the admin notice when the XLIFF is missing the `target` element, or the element is empty
 
 # 2.1.7
 
