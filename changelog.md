@@ -1,3 +1,13 @@
+# 2.2.1.2
+ 
+## Feature
+* [wpmltm-1487] Added button to refresh data from ICanLocalize
+
+# 2.2.1.1
+ 
+## Fixes
+* [wpmltm-1487] Reduced automatic calls to ICanLocalize server to one per hour
+
 # 2.2.1
 
 ## Fixes

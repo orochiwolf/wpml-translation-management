@@ -16,15 +16,17 @@ class WPML_TP_HTTP_Request_Filter {
 		if ( $this->contains_resource( $this->request ) === false ) {
 			$this->request['headers'] = 'Content-type: application/json';
 			$this->request['body']    = wp_json_encode( $this->request['body'] );
-
-			return $this->request;
+		} else {
+			list( $headers, $body ) = $this->_prepare_multipart_request( $this->request['body'] );
+			$this->request['headers'] = $headers;
+			$this->request['body']    = $body;
 		}
-		list( $headers, $body ) = $this->_prepare_multipart_request( $this->request['body'] );
-		$this->request['headers'] = $headers;
-		$this->request['body']    = $body;
 
-		return $this->request;
-	}
+		if ( $this->request['method'] === 'GET' ) {
+			unset( $this->request['body'] );
+		}
+
+		return $this->request;	}
 
 	/**
 	 * Checks if a request contains a file resource handle

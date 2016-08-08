@@ -1,16 +1,18 @@
 <?php
 
 class TranslationProxy_Translator {
+	private static $icl_query_website_details_transient_key = 'wpml_icl_query_website_details';
 
 	/**
-	 *
 	 * Get information about translators from current project. Works only for ICL as a Translation Service
+
+*
+	 * @param bool    $force
 	 *
+	 * @return array|bool
 	 * @global object $sitepress
-	 *
-	 * @return array
 	 */
-	public static function get_icl_translator_status() {
+	public static function get_icl_translator_status( $force = false ) {
 		/** @var WPML_Pro_Translation $ICL_Pro_Translation */
 		global $sitepress, $ICL_Pro_Translation;
 
@@ -34,8 +36,8 @@ class TranslationProxy_Translator {
 			return $result;
 		}
 
-		$iclsettings = array();
-		$website_details = self::get_website_details( new TranslationProxy_Project( TranslationProxy::get_current_service() ) );
+		$iclsettings     = array();
+		$website_details = self::get_website_details( new TranslationProxy_Project( TranslationProxy::get_current_service() ), $force );
 
 		if ( (bool) $website_details === false ) {
 			return false;
@@ -137,7 +139,7 @@ class TranslationProxy_Translator {
 		}
 
 		if ( ! isset( $icl_lang_sub_status ) ) {
-			$translator_status   = self::get_icl_translator_status();
+			$translator_status   = self::get_icl_translator_status( false );
 			$icl_lang_sub_status = isset( $translator_status['icl_lang_status'] )
 				? $translator_status['icl_lang_status'] : array();
 		}
@@ -151,6 +153,10 @@ class TranslationProxy_Translator {
 		return $icl_lang_sub_status;
 	}
 
+	public static function flush_website_details_cache() {
+		delete_transient( self::$icl_query_website_details_transient_key );
+	}
+
 	/**
 	 * Sends request to ICL to get website details (including language pairs)
 	 *
@@ -158,23 +164,29 @@ class TranslationProxy_Translator {
 	 *
 	 * @return array
 	 */
-	private static function get_website_details( $project ) {
+	private static function get_website_details( $project, $force = false ) {
 
-		require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
-		require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
-		require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
+		$result = get_transient( self::$icl_query_website_details_transient_key );
 
-		$site_id    = $project->ts_id;
-		$access_key = $project->ts_access_key;
+		if ( ! $result || $force ) {
+			require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
+			require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
+			require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
 
-		$default = array();
+			$site_id    = $project->ts_id;
+			$access_key = $project->ts_access_key;
 
-		if ( empty( $site_id ) ) {
-			return $default;
+			$default = array();
+
+			if ( empty( $site_id ) ) {
+				return $default;
+			}
+
+			$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
+			$result    = $icl_query->get_website_details();
+
+			set_transient( self::$icl_query_website_details_transient_key, $result, DAY_IN_SECONDS );
 		}
-
-		$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
-		$result    = $icl_query->get_website_details();
 
 		return $result;
 	}
@@ -313,4 +325,24 @@ class TranslationProxy_Translator {
 		$icl_query = new ICanLocalizeQuery();
 		$icl_query->updateAccount( $params );
 	}
+
+
+	public static function flush_website_details_cache_action() {
+		$nonce          = array_key_exists( 'nonce', $_POST ) ? $_POST['nonce'] : null;
+		$action         = array_key_exists( 'action', $_POST ) ? $_POST['action'] : null;
+		$nonce_is_valid = wp_verify_nonce( $nonce, $action );
+
+		if ( $nonce_is_valid ) {
+			TranslationProxy_Translator::flush_website_details_cache();
+			$query_args = array(
+				'page' => urlencode( $_GET['page'] ),
+				'sm'   => urlencode( $_GET['sm'] ),
+			);
+			$link_url   = add_query_arg( $query_args, get_admin_url( null, 'admin.php' ) );
+			wp_send_json_success( array( 'redirectTo' => $link_url ) );
+		}
+
+		wp_send_json_error( 'Nonce is not valid.' );
+	}
+
 }
