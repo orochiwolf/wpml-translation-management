@@ -88,6 +88,7 @@ class WPML_Translation_Management extends WPML_SP_User {
 			add_action( 'wp_ajax_icl_pickup_translations_complete', 'icl_pickup_translations_complete' );
 			add_action( 'wp_ajax_icl_get_blog_users_not_translators', 'icl_get_blog_users_not_translators' );
 			add_action( 'wp_ajax_get_translator_status', array('TranslationProxy_Translator', 'get_translator_status_ajax') );
+			add_action( 'wp_ajax_wpml-flush-website-details-cache', array( 'TranslationProxy_Translator', 'flush_website_details_cache_action' ) );
 			add_action( 'wpml_updated_translation_status', array( 'TranslationProxy_Batch', 'maybe_assign_generic_batch' ),  10, 2 );
 			add_action('init', array($this, 'handle_notices_action'));
 			do_action('wpml_tm_init');
@@ -693,8 +694,8 @@ class WPML_Translation_Management extends WPML_SP_User {
 	}
 
 	private function service_has_accepted_translators() {
-		$result = false;
-		$icl_data = TranslationProxy_Translator::get_icl_translator_status();
+		$result   = false;
+		$icl_data = TranslationProxy_Translator::get_icl_translator_status( false );
 		if ( isset( $icl_data[ 'icl_lang_status' ] ) && is_array( $icl_data[ 'icl_lang_status' ] ) ) {
 			foreach ( $icl_data[ 'icl_lang_status' ] as $translator ) {
 				if ( isset( $translator[ 'contract_id' ] ) && $translator[ 'contract_id' ] != 0 ) {
@@ -868,15 +869,15 @@ class WPML_Translation_Management extends WPML_SP_User {
 	 * Handles the display of notices in the TM translators tab
 	 */
 	private function handle_notices() {
-		global $sitepress;
+		if ( $this->sitepress->get_wp_api()->is_tm_page() ) {
+			$lang_status = TranslationProxy_Translator::get_icl_translator_status();
+			if ( $lang_status ) {
+				$this->sitepress->save_settings( $lang_status );
+			}
 
-		$lang_status = TranslationProxy_Translator::get_icl_translator_status();
-		if ( ! empty( $lang_status ) ) {
-			$sitepress->save_settings( $lang_status );
-		}
-
-		if ( ! defined( 'DOING_AJAX' ) ) {
-			$this->service_authentication_notice();
+			if ( ! defined( 'DOING_AJAX' ) ) {
+				$this->service_authentication_notice();
+			}
 		}
 	}
 }
