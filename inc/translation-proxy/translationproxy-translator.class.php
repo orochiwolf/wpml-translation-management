@@ -1,29 +1,26 @@
 <?php
 
 class TranslationProxy_Translator {
-	private static $icl_query_website_details_transient_key = 'wpml_icl_query_website_details';
-
 	/**
 	 * Get information about translators from current project. Works only for ICL as a Translation Service
-
-*
-	 * @param bool    $force
+	 *
+	 * @param bool $force
 	 *
 	 * @return array|bool
-	 * @global object $sitepress
 	 */
 	public static function get_icl_translator_status( $force = false ) {
+		/** @var SitePress $sitepress */
 		/** @var WPML_Pro_Translation $ICL_Pro_Translation */
 		global $sitepress, $ICL_Pro_Translation;
 
 		if ( ! TranslationProxy::translator_selection_available() ) {
-			return false;
+			return array();
 		}
 
 		$project = TranslationProxy::get_current_project();
 
 		if ( ! $project ) {
-			return false;
+			return array();
 		}
 
 		$cache_key   = md5( serialize( $project ) );
@@ -36,11 +33,11 @@ class TranslationProxy_Translator {
 			return $result;
 		}
 
-		$iclsettings     = array();
-		$website_details = self::get_website_details( new TranslationProxy_Project( TranslationProxy::get_current_service() ), $force );
+		$translator_status = array();
+		$website_details   = self::get_website_details( new TranslationProxy_Project( TranslationProxy::get_current_service() ), $force );
 
-		if ( (bool) $website_details === false ) {
-			return false;
+		if ( false === (bool) $website_details ) {
+			return array();
 		}
 
 		$language_pairs = array();
@@ -62,12 +59,13 @@ class TranslationProxy_Translator {
 						$_tr = $lang['translators']['translator'];
 					}
 					foreach ( $_tr as $t ) {
-						if ( $max_rate === false || $t['attr']['amount'] > $max_rate ) {
+						if ( false === $max_rate || $t['attr']['amount'] > $max_rate ) {
 							$max_rate = $t['attr']['amount'];
 						}
-						$translators[] = array( 'id'          => $t['attr']['id'],
-						                        'nickname'    => $t['attr']['nickname'],
-						                        'contract_id' => $t['attr']['contract_id']
+						$translators[] = array(
+							'id'          => $t['attr']['id'],
+							'nickname'    => $t['attr']['nickname'],
+							'contract_id' => $t['attr']['contract_id'],
 						);
 					}
 				}
@@ -80,39 +78,41 @@ class TranslationProxy_Translator {
 					'contract_id'           => $lang['attr']['contract_id'],
 					'id'                    => $lang['attr']['id'],
 					'translators'           => $translators,
-					'max_rate'              => $max_rate
+					'max_rate'              => $max_rate,
 				);
 			}
 		}
 
-		$iclsettings['icl_lang_status'] = $language_pairs;
+		$translator_status['icl_lang_status'] = $language_pairs;
 		if ( isset( $res['client']['attr'] ) ) {
-			$iclsettings['icl_balance']        = $res['client']['attr']['balance'];
-			$iclsettings['icl_anonymous_user'] = $res['client']['attr']['anon'];
+			$translator_status['icl_balance']        = $res['client']['attr']['balance'];
+			$translator_status['icl_anonymous_user'] = $res['client']['attr']['anon'];
 		}
 		if ( isset( $res['html_status']['value'] ) ) {
-			$iclsettings['icl_html_status'] = html_entity_decode( $res['html_status']['value'] );
-			$iclsettings['icl_html_status'] = preg_replace_callback(
+			$translator_status['icl_html_status'] = html_entity_decode( $res['html_status']['value'] );
+			$translator_status['icl_html_status'] = preg_replace_callback(
 				'#<a([^>]*)href="([^"]+)"([^>]*)>#i',
 				create_function( '$matches', 'global $sitepress; return TranslationProxy_Popup::get_link($matches[2]);' ),
-				$iclsettings['icl_html_status']
+				$translator_status['icl_html_status']
 			);
 		}
 
 		if ( isset( $res['translators_management_info']['value'] ) ) {
-			$iclsettings['translators_management_info'] = html_entity_decode( $res['translators_management_info']['value'] );
-			$iclsettings['translators_management_info'] = preg_replace_callback(
+			$translator_status['translators_management_info'] = html_entity_decode( $res['translators_management_info']['value'] );
+			$translator_status['translators_management_info'] = preg_replace_callback(
 				'#<a([^>]*)href="([^"]+)"([^>]*)>#i',
 				create_function( '$matches', 'global $sitepress; return TranslationProxy_Popup::get_link($matches[2]);' ),
-				$iclsettings['translators_management_info']
+				$translator_status['translators_management_info']
 			);
 		}
 
-		$iclsettings['icl_support_ticket_id'] = @intval( $res['attr']['support_ticket_id'] );
+		$translator_status['icl_support_ticket_id'] = null;
+		if ( isset( $res['attr']['support_ticket_id'] ) ) {
+			$translator_status['icl_support_ticket_id'] = (int) $res['attr']['support_ticket_id'];
+		}
+		wp_cache_set( $cache_key, $translator_status, $cache_group );
 
-		wp_cache_set( $cache_key, $iclsettings, $cache_group );
-
-		return $iclsettings;
+		return $translator_status;
 	}
 
 	/**
@@ -139,7 +139,7 @@ class TranslationProxy_Translator {
 		}
 
 		if ( ! isset( $icl_lang_sub_status ) ) {
-			$translator_status   = self::get_icl_translator_status( false );
+			$translator_status   = self::get_icl_translator_status();
 			$icl_lang_sub_status = isset( $translator_status['icl_lang_status'] )
 				? $translator_status['icl_lang_status'] : array();
 		}
@@ -153,42 +153,32 @@ class TranslationProxy_Translator {
 		return $icl_lang_sub_status;
 	}
 
-	public static function flush_website_details_cache() {
-		delete_transient( self::$icl_query_website_details_transient_key );
-	}
-
 	/**
 	 * Sends request to ICL to get website details (including language pairs)
 	 *
 	 * @param TranslationProxy_Project $project
+	 * @param bool                     $force
 	 *
 	 * @return array
 	 */
 	private static function get_website_details( $project, $force = false ) {
 
-		$result = get_transient( self::$icl_query_website_details_transient_key );
+		require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
+		require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
+		require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
 
-		if ( ! $result || $force ) {
-			require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
-			require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
-			require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
+		$site_id    = $project->ts_id;
+		$access_key = $project->ts_access_key;
 
-			$site_id    = $project->ts_id;
-			$access_key = $project->ts_access_key;
+		$default = array();
 
-			$default = array();
-
-			if ( empty( $site_id ) ) {
-				return $default;
-			}
-
-			$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
-			$result    = $icl_query->get_website_details();
-
-			set_transient( self::$icl_query_website_details_transient_key, $result, DAY_IN_SECONDS );
+		if ( ! $site_id ) {
+			return $default;
 		}
 
-		return $result;
+		$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
+
+		return $icl_query->get_website_details( $force );
 	}
 
 	/**
@@ -212,7 +202,7 @@ class TranslationProxy_Translator {
 
 		$lang_status = TranslationProxy_Translator::get_language_pairs();
 
-		if ( empty ( $lang_status ) ) {
+		if ( ! $lang_status ) {
 			return $translators;
 		}
 
@@ -326,6 +316,9 @@ class TranslationProxy_Translator {
 		$icl_query->updateAccount( $params );
 	}
 
+	public static function flush_website_details_cache() {
+		delete_transient( ICanLocalizeQuery::WEBSITE_DETAILS_TRANSIENT_KEY );
+	}
 
 	public static function flush_website_details_cache_action() {
 		$nonce          = array_key_exists( 'nonce', $_POST ) ? $_POST['nonce'] : null;
@@ -333,16 +326,15 @@ class TranslationProxy_Translator {
 		$nonce_is_valid = wp_verify_nonce( $nonce, $action );
 
 		if ( $nonce_is_valid ) {
-			TranslationProxy_Translator::flush_website_details_cache();
+			self::flush_website_details_cache();
 			$query_args = array(
-				'page' => urlencode( $_GET['page'] ),
-				'sm'   => urlencode( $_GET['sm'] ),
+				'page' => urlencode( 'wpml-translation-management/menu/main.php' ),
+				'sm'   => urlencode( 'translators' ),
 			);
 			$link_url   = add_query_arg( $query_args, get_admin_url( null, 'admin.php' ) );
 			wp_send_json_success( array( 'redirectTo' => $link_url ) );
+		} else {
+			wp_send_json_error( 'Nonce is not valid.' );
 		}
-
-		wp_send_json_error( 'Nonce is not valid.' );
 	}
-
 }
