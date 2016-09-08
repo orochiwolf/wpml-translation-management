@@ -332,7 +332,6 @@ var WPMLTranslationServicesDialog = function () {
 									});
 		}
 	};
-
 };
 
 jQuery(document).ready(function () {

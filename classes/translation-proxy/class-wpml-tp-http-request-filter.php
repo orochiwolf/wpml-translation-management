@@ -26,7 +26,8 @@ class WPML_TP_HTTP_Request_Filter {
 			unset( $this->request['body'] );
 		}
 
-		return $this->request;	}
+		return $this->request;
+	}
 
 	/**
 	 * Checks if a request contains a file resource handle
