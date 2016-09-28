@@ -13,6 +13,11 @@ class TranslationProxy_Translator {
 		/** @var WPML_Pro_Translation $ICL_Pro_Translation */
 		global $sitepress, $ICL_Pro_Translation;
 
+		if ( ! $ICL_Pro_Translation ) {
+			$job_factory         = wpml_tm_load_job_factory();
+			$ICL_Pro_Translation = new WPML_Pro_Translation( $job_factory );
+		}
+
 		if ( ! TranslationProxy::translator_selection_available() ) {
 			return array();
 		}

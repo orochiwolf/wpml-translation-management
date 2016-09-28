@@ -582,7 +582,7 @@ class WPML_TM_Menus
             </li>
                 <li><a href="#ml-content-setup-sec-5-1"><?php _e('XLIFF file options', 'wpml-xliff'); ?></a></li>
             <li>
-                <a href="#ml-content-setup-sec-6"><?php _e('Custom fields translation', 'wpml-translation-management'); ?></a>
+                <a href="#ml-content-setup-sec-cf"><?php _e('Custom fields translation', 'wpml-translation-management'); ?></a>
             </li>
             <?php
 
@@ -1479,7 +1479,7 @@ class WPML_TM_Menus
             ?>
             <tr>
                 <td scope="col" colspan="<?php echo $colspan; ?>" align="center">
-                    <?php _e( 'No documents found', 'wpml-translation-management' ) ?>
+	                <span class="no-documents-found"><?php _e( 'No documents found', 'wpml-translation-management' ) ?></span>
                 </td>
             </tr>
         <?php

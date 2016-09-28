@@ -170,7 +170,9 @@ class WPML_TM_ACF extends WPML_WPDB_And_SP_User {
 			foreach ( $groups as $group ) {
 				if ( (int) $group_id === $group->ID ) {
 					$fields = acf_get_fields( $group->ID );
-					$this->update_custom_fields_settings( $fields );
+					if ( is_array( $fields ) ) {
+						$this->update_custom_fields_settings( $fields );
+					}
 				}
 			}
 

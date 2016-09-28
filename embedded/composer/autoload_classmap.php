@@ -101,6 +101,8 @@ return array(
     'WPML_TP_API' => $baseDir . '/classes/translation-proxy/api/class-wpml-tp-api.php',
     'WPML_TP_API_AJAX' => $baseDir . '/classes/translation-proxy/api/class-wpml-tp-api-ajax.php',
     'WPML_TP_Communication' => $baseDir . '/classes/translation-proxy/api/class-wpml-tp-communication.php',
+    'WPML_TP_Extra_Field' => $baseDir . '/classes/translation-proxy/models/wpml-tp-extra-field.php',
+    'WPML_TP_Extra_Field_Display' => $baseDir . '/classes/translation-proxy/ui/wpml-tp-extra-field-display.php',
     'WPML_TP_HTTP_Request_Filter' => $baseDir . '/classes/translation-proxy/class-wpml-tp-http-request-filter.php',
     'WPML_TP_Pickup_Box_Ajax_Action' => $baseDir . '/classes/translation-proxy/class-wpml-tp-pickup-box-ajax-action.php',
     'WPML_TP_Polling_Box' => $baseDir . '/classes/menu/tp-polling/class-wpml-tp-polling-box.php',

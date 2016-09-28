@@ -24,31 +24,31 @@ class WPML_TM_Translation_Status extends WPML_TM_Record_User {
 		/** @var WPML_TM_Element_Translations $wpml_tm_element_translations */
 		global $wpml_tm_element_translations;
 
-		$cache_key = md5( $trid . $target_lang_code );
-		$found = false;
-		$status = $this->wpml_cache->get( $cache_key, $found );
-		if ( false === $found ) {
+		$cache_key  = md5( $trid . $target_lang_code );
+		$found      = false;
+		$new_status = $this->wpml_cache->get( $cache_key, $found );
+		if ( ! $found ) {
 			if ( $trid ) {
 				$element_ids         = array_filter( $this->get_element_ids( $trid ) );
 				$element_type_prefix = $wpml_tm_element_translations->get_element_type_prefix( $trid, $target_lang_code );
 				foreach ( $element_ids as $id ) {
 					if ( $this->is_in_basket( $id, $target_lang_code, $element_type_prefix ) ) {
-						$status = ICL_TM_IN_BASKET;
+						$new_status = ICL_TM_IN_BASKET;
 						break;
 					} elseif ( $job_status = $this->is_in_active_job( $id, $target_lang_code, $element_type_prefix, true ) ) {
-						$status = $job_status;
+						$new_status = $job_status;
 						break;
 					}
 				}
-				$status = ICL_TM_IN_BASKET !== $status && $wpml_tm_element_translations->is_update_needed( $trid, $target_lang_code )
-					? ICL_TM_NEEDS_UPDATE
-					: $status;
+				$new_status = ICL_TM_IN_BASKET !== $new_status && $wpml_tm_element_translations->is_update_needed( $trid, $target_lang_code ) ? ICL_TM_NEEDS_UPDATE : $new_status;
 			}
 
-			$this->wpml_cache->set( $cache_key, $status );
+			if ( false !== $new_status ) {
+				$this->wpml_cache->set( $cache_key, $status );
+			}
 		}
 
-		return $status;
+		return false !== $new_status ? $new_status : $status;
 	}
 
 	public function reload(){
@@ -97,12 +97,13 @@ class WPML_TM_Translation_Status extends WPML_TM_Record_User {
 
 	private function get_element_ids( $trid ) {
 		if ( ! isset( $this->element_id_cache[ $trid ] ) ) {
-			$wpdb = $this->tm_records->wpdb();
-			$this->element_id_cache[ $trid ] = $wpdb->get_col(
-				$wpdb->prepare( "SELECT element_id
-								 FROM {$wpdb->prefix}icl_translations
-								 WHERE trid = %d",
-					$trid ) );
+			$elements = $this->tm_records->get_post_translations()->get_element_translations( null, $trid );
+			$elements = $elements ? $elements : $this->tm_records->get_term_translations()->get_element_translations( null, $trid );
+			if ( $elements ) {
+				$this->element_id_cache[ $trid ] = array_values( $elements );
+			} else {
+				$this->element_id_cache[ $trid ] = $this->tm_records->get_element_ids_from_trid( $trid );
+			}
 		}
 
 		return $this->element_id_cache[ $trid ];
