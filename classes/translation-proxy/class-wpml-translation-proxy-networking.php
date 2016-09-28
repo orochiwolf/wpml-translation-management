@@ -97,7 +97,7 @@ class WPML_Translation_Proxy_Networking {
 		$params = array(
 			'accesskey'   => $project->access_key,
 			'api_version' => self::API_VERSION,
-			'project_id'  => $project->id
+			'project_id'  => $project->id,
 		);
 
 		return TranslationProxy_Api::proxy_request( '/projects/{project_id}/extra_fields.json', $params );

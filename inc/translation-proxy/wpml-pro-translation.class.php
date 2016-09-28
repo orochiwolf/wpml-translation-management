@@ -30,11 +30,11 @@ class WPML_Pro_Translation extends WPML_TM_Job_Factory_User {
 	 */
 	function __construct( &$job_factory ) {
 		parent::__construct( $job_factory );
-		global $iclTranslationManagement, $wpdb, $sitepress;
+		global $iclTranslationManagement, $wpdb, $sitepress, $wpml_post_translations, $wpml_term_translations;
 		
 		$this->tmg                               =& $iclTranslationManagement;
 		$this->xliff_reader_factory              = new WPML_TM_Xliff_Reader_Factory( $this->job_factory );
-		$wpml_tm_records                         = new WPML_TM_Records( $wpdb );
+		$wpml_tm_records                         = new WPML_TM_Records( $wpdb, $wpml_post_translations, $wpml_term_translations );
 		$this->cms_id_helper                     = new WPML_TM_CMS_ID( $wpml_tm_records, $job_factory );
 		$this->sitepress                         = $sitepress;
 		

@@ -2,14 +2,14 @@
 /*
 Plugin Name: WPML Translation Management
 Plugin URI: https://wpml.org/
-Description: Add a complete translation process for WPML | <a href="https://wpml.org">Documentation</a> | <a href="https://wpml.org/version/wpml-3-5-0/">WPML 3.5.0 release notes</a>
+Description: Add a complete translation process for WPML | <a href="https://wpml.org">Documentation</a> | <a href="https://wpml.org/version/wpml-3-5-2/">WPML 3.5.2 release notes</a>
 Author: OnTheGoSystems
 Author URI: http://www.onthegosystems.com/
-Version: 2.2.2
+Version: 2.2.4
 Plugin Slug: wpml-translation-management
 */
 
-if ( defined( 'WPML_TM_VERSION' ) ) {
+if ( defined( 'WPML_TM_VERSION' ) || get_option( '_wpml_inactive' ) ) {
 	return;
 }
 
@@ -26,7 +26,7 @@ if ( defined( 'ICL_SITEPRESS_VERSION' ) && is_array( $bundle ) ) {
 	}
 }
 
-define( 'WPML_TM_VERSION', '2.2.2' );
+define( 'WPML_TM_VERSION', '2.2.3' );
 
 // Do not uncomment the following line!
 // If you need to use this constant, use it in the wp-config.php file

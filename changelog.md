@@ -1,3 +1,20 @@
+# 2.2.4
+
+## Fixes
+* [wpmltm-1549] Fix fatal error in user account when user is translator
+
+# 2.2.3
+
+## Fixes
+* [wpmltm-1504] Fixed the link to "Custom fields translation".
+* [wpmltm-1434] Fixed the validation of zipped XLIFF files, when they are made from Mac OS.
+* [wpmltm-1524] Fixed a fatal error when using "Advanced Custom Fields" plugin and saving a group with no fields in it.
+* [wpmltm-1525] Fixed an issue with the multi-site configuration, when a sub-site admin can't access post translations.
+* [wpmltm-1529] Extra fields received from Translation Proxy are properly rendered.
+
+## Performances
+* [wpmlcore-3227] Reduced the number of queries in the post listing pages.
+
 # 2.2.2
 
 ## Fixes
