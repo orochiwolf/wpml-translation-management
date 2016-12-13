@@ -1,3 +1,16 @@
+# 2.2.6
+
+## Fixes
+* [wpmltm-1587] Fixed issue where multiple lines got stripped when copying all fields in the Translation Editor
+* [wpmlcore-3784] Fixed compatibility issue with ACF Pro causing fatal error for translatable field groups 
+
+# 2.2.5
+
+## Fixes
+* [wpmltm-1555] Fixed a console error in translation basket when sending batches to an unsupported language
+* [wpmltm-1528] Clear batch when rolling back to avoid duplicatd jobs
+* [wpmltm-1566] Prevent sending empty units in XLIFF files 
+
 # 2.2.4.1
 
 ## Fixes

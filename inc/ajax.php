@@ -1,7 +1,7 @@
 <?php
 global $wpdb;
 
-require WPML_TM_PATH . '/menu/basket-tab/wpml-basket-tab-ajax.class.php';
+require_once WPML_TM_PATH . '/menu/basket-tab/wpml-basket-tab-ajax.class.php';
 
 $basket_ajax = new WPML_Basket_Tab_Ajax( TranslationProxy::get_current_project(),
                                          wpml_tm_load_basket_networking(),

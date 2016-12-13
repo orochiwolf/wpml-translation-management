@@ -98,6 +98,9 @@ class WPML_TM_Dashboard extends WPML_WPDB_User {
                 $sql = $this->add_category_where( $sql, $parent_id );
             }
         }
+
+	    $sql = apply_filters( 'wpml_tm_dashboard_sql', $sql );
+
         $sql = $this->add_order_snippet( $sql, $sort_by, $sort_order );
         $sql = $this->add_pagination_snippet( $sql, $limit_no );
 
