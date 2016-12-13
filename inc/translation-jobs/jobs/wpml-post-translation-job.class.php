@@ -61,10 +61,15 @@ class WPML_Post_Translation_Job extends WPML_Element_Translation_Job {
 								$element->field_format );
 						}
 				}
-				$wpdb->update( $wpdb->prefix . 'icl_translate', array(
-					'field_data_translated' => $field_data,
-					'field_finished'        => 1
-				), array( 'tid' => $element->tid ) );
+				if ( $field_data ) {
+					$wpdb->update( $wpdb->prefix . 'icl_translate',
+						array(
+							'field_data_translated' => $field_data,
+							'field_finished'        => 1
+						),
+						array( 'tid' => $element->tid )
+					);
+				}
 			}
 			$iclTranslationManagement->mark_job_done( $job_id );
 		}
