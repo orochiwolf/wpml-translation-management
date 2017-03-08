@@ -46,7 +46,7 @@ class WPML_TM_Translation_Status {
 			}
 
 			if ( false !== $new_status ) {
-				$this->wpml_cache->set( $cache_key, $status );
+				$this->wpml_cache->set( $cache_key, $new_status );
 			}
 		}
 

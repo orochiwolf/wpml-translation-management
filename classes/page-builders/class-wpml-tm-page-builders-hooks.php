@@ -21,6 +21,7 @@ class WPML_TM_Page_Builders_Hooks {
 		add_filter( 'wpml_tm_adjust_translation_fields',    array( $this, 'adjust_translation_fields_filter' ), 10, 2 );
 		add_filter( 'wpml_tm_job_layout',                   array( $this, 'job_layout_filter' ) );
 		add_filter( 'wpml_link_to_translation',             array( $this, 'link_to_translation_filter' ), 20, 4 );
+		add_filter( 'wpml_get_translatable_types',          array( $this, 'remove_shortcode_strings_type_filter' ), 11);
 	}
 
 	/**
@@ -89,6 +90,22 @@ class WPML_TM_Page_Builders_Hooks {
 	public function link_to_translation_filter( $link, $post_id, $lang, $trid  ) {
 		$worker = $this->get_worker();
 		return $worker->link_to_translation_filter( $link, $post_id, $lang, $trid );
+	}
+
+	/**
+	 * Remove "Page Builder ShortCode Strings" from translation dashboard filters
+	 *
+	 * @param array $types
+	 *
+	 * @return mixed
+	 */
+	public function remove_shortcode_strings_type_filter( $types ) {
+
+		if ( array_key_exists( 'page-builder-shortcode-strings', $types ) ) {
+			unset( $types['page-builder-shortcode-strings'] );
+		}
+
+		return $types;
 	}
 
 	/**
