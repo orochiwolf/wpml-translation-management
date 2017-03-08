@@ -219,7 +219,7 @@ class WPML_Post_Translation_Job extends WPML_Element_Translation_Job {
 				$wpdb->delete( $j, array( 'field_type' => 't_' . $term->ttid, 'job_id' => $job_id ) );
 			} else {
 				$wpdb->update( $j,
-					array( 'field_data_translated' => base64_encode( $term->name ) ),
+					array( 'field_data_translated' => base64_encode( $term->name ), 'field_finished' => 1 ),
 					array( 'field_type' => 't_' . $term->ttid, 'job_id' => $job_id ) );
 			}
 		}

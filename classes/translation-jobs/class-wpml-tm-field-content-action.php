@@ -72,8 +72,14 @@ class WPML_TM_Field_Content_Action extends WPML_TM_Job_Factory_User {
 	private function sanitize_field_content( $content ) {
 		$decoded = base64_decode( $content );
 
-		return strpos( $decoded,
-			"\n" ) !== false ? wpautop( $decoded )
-			: $decoded;
+		if ( ! $this->is_html( $decoded ) && false !== strpos( $decoded, '\n' ) ) {
+			$decoded = wpautop( $decoded );
+		}
+
+		return $decoded;
+	}
+
+	private function is_html( $string ) {
+		return $string !== strip_tags( $string );
 	}
 }
