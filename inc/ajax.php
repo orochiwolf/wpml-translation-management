@@ -31,9 +31,10 @@ function wpml_save_job_ajax() {
 	if ( ! wpml_is_action_authenticated( 'wpml_save_job' ) ) {
 		die( 'Wrong Nonce' );
 	}
-	$data    = array();
-	parse_str( $_POST['data'], $data );
-	
+	$data      = array();
+	$post_data = WPML_TM_Post_Data::strip_slashes_for_single_quote( $_POST['data'] );
+	parse_str( $post_data, $data );
+
 	$job = new WPML_TM_Editor_Job_Save( );
 	
 	$job_details = array( 'job_type'             => $data[ 'job_post_type' ],
