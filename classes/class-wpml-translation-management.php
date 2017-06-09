@@ -154,7 +154,9 @@ class WPML_Translation_Management {
 			add_action ( 'wpml_translation_basket_page_after', array( $this, 'add_com_log_link' ) );
 
 			$this->translate_independently();
+		}
 
+		if ( $wpml_wp_api->is_admin() || defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
 			$page_builder_hooks = new WPML_TM_Page_Builders_Hooks();
 			$page_builder_hooks->init_hooks();
 		}
