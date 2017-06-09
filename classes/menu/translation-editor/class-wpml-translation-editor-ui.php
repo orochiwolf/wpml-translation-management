@@ -1,6 +1,7 @@
 <?php
 
 class WPML_Translation_Editor_UI extends WPML_WPDB_And_SP_User {
+	const MAX_ALLOWED_SINGLE_LINE_LENGTH = 50;
 	private $all_translations;
 	/**
 	 * @var WPML_Translation_Editor
@@ -148,7 +149,7 @@ class WPML_Translation_Editor_UI extends WPML_WPDB_And_SP_User {
 
 		$this->fields             = $this->job_factory->field_contents( (int) $this->job_instance->get_id() )->run();
 		$this->fields             = $this->add_titles_and_adjust_styles( $this->fields );
-		$this->fields             = $this->add_rtl_attribues( $this->fields );
+		$this->fields             = $this->add_rtl_attributes( $this->fields );
 		$model['fields']          = $this->fields;
 		$model['layout']          = $this->job_layout->run( $model['fields'], $this->tm_instance );
 		$model['rtl_original']    = $this->rtl_original;
@@ -267,10 +268,10 @@ class WPML_Translation_Editor_UI extends WPML_WPDB_And_SP_User {
 				$field['title']       = apply_filters( 'wpml_tm_editor_string_name', $field['field_type'], $this->original_post );
 				$field['field_style'] = (string) apply_filters( 'wpml_tm_editor_string_style', $field['field_style'], $field['field_type'], $this->original_post );
 			} else if ( $this->is_a_custom_field( $field ) ) {
-				$custom_field_data    = $this->custom_field_data( (object) $field );
-				$field                = (array) $custom_field_data[2];
-				$field['title']       = $custom_field_data[0];
-				$field['field_style'] = (string) $custom_field_data[1];
+		  $custom_field_data    = $this->custom_field_data( (object) $field );
+		  $field                = (array) $custom_field_data[2];
+		  $field['title']       = $custom_field_data[0];
+		  $field['field_style'] = $this->get_adjusted_field_style( $field, $custom_field_data );
 			} else if ( $this->is_a_term( $field ) ) {
 				$field['title'] = '';
 			} else {
@@ -289,12 +290,49 @@ class WPML_Translation_Editor_UI extends WPML_WPDB_And_SP_User {
 						break;
 				}
 			}
+
+			$this->adjust_field_style_for_unsafe_content( $field );
 		}
 
 		return apply_filters( 'wpml_tm_adjust_translation_fields', $fields, $this->job );
 	}
 
-	private function add_rtl_attribues( $fields ) {
+	private function get_adjusted_field_style( array &$field, array $custom_field_data ) {
+		$field_style = $custom_field_data[1];
+		/**
+		 * wpml_tm_editor_max_allowed_single_line_length filter
+		 *
+		 * Filters the value of `\WPML_Translation_Editor_UI::MAX_ALLOWED_SINGLE_LINE_LENGTH`
+		 *
+		 * @param       int                MAX_ALLOWED_SINGLE_LINE_LENGTH The length of the string, after which it must use a multiline input
+		 * @param array $field             The generic field data
+		 * @param array $custom_field_data The custom field specific data
+		 *
+		 * @since 2.3.1
+		 */
+		if ( 0 === (int) $field_style && strlen( $field['field_data'] ) > (int) apply_filters( 'wpml_tm_editor_max_allowed_single_line_length', self::MAX_ALLOWED_SINGLE_LINE_LENGTH, $field, $custom_field_data ) ) {
+			return '1';
+		}
+
+		return (string) $field_style;
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	private function adjust_field_style_for_unsafe_content( array &$field ) {
+		$black_list         = array( 'script', 'style', 'iframe' );
+		$black_list_pattern = '#</?(' . implode( '|', $black_list ) . ')[^>]*>#i';
+
+		if ( '2' === $field['field_style'] && preg_replace( $black_list_pattern, '', $field['field_data'] ) !== $field['field_data'] ) {
+			$field['field_style'] = '1';
+		}
+	}
+
+
+	private function add_rtl_attributes( array $fields ) {
 		foreach ( $fields as &$field ) {
 			$field['original_direction']    = $this->rtl_original ? 'dir="rtl"' : 'dir="ltr"';
 			$field['translation_direction'] = $this->rtl_translation ? 'dir="rtl"' : 'dir="ltr"';
@@ -315,7 +353,7 @@ class WPML_Translation_Editor_UI extends WPML_WPDB_And_SP_User {
 			$model['hide_empty_fields']                            = $job->is_hide_empty_fields();
 			$model['show_media_button']                            = $job->show_media_button();
 
-			$model['fields'] = $this->add_rtl_attribues( $job->get_all_fields() );
+			$model['fields'] = $this->add_rtl_attributes( $job->get_all_fields() );
 			$this->fields    = $model['fields'];
 
 			$model['layout'] = $job->get_layout_of_fields();
