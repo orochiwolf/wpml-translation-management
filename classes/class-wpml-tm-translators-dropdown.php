@@ -119,7 +119,8 @@ class WPML_TM_Translators_Dropdown {
 			}
 			$translators = apply_filters( 'wpml_tm_translators_list', $translators );
 
-			$dropdown .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" ' . ( $disabled ? 'disabled="disabled"' : '' ) . '>';
+			$dropdown .= '<select id="' . esc_attr( $id ) . '" class="js-wpml-translator-dropdown" data-lang-to="' . $to . '"
+								  name="' . esc_attr( $name ) . '" ' . ( $disabled ? 'disabled="disabled"' : '' ) . '>';
 
 			if ( $default_name ) {
 				$dropdown_selected = selected( $selected, false, false );
@@ -145,7 +146,7 @@ class WPML_TM_Translators_Dropdown {
 				$dropdown .= '</option>';
 			}
 			$dropdown .= '</select>';
-		} catch ( TranslationProxy_Api_Error $ex ) {
+		} catch ( WPMLTranslationProxyApiException $ex ) {
 			$dropdown .= __( 'Translation Proxy error', 'wpml-translation-management' ) . ': ' . $ex->getMessage();
 		} catch ( Exception $ex ) {
 			$dropdown .= __( 'Error', 'wpml-translation-management' ) . ': ' . $ex->getMessage();
