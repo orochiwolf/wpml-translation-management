@@ -153,14 +153,15 @@ class WPML_TM_Dashboard_Display_Filter {
     <?php
     }
 
-    private function filter_title_textbox() {
-	    ?>
-        <input type="text" id="filter_title" name="filter[title]"
-               value="<?php echo isset( $this->translation_filter['title'] ) ? $this->translation_filter['title'] : '' ?>"
-               placeholder="<?php esc_attr_e( 'Title', 'wpml-translation-management' ); ?>"
-        />
-	    <?php
-    }
+	private function filter_title_textbox() {
+		$title = isset( $this->translation_filter['title'] ) ? $this->translation_filter['title'] : '';
+		?>
+		<input type="text" id="filter_title" name="filter[title]"
+		       value="<?php echo esc_attr( $title ); ?>"
+		       placeholder="<?php esc_attr_e( 'Title', 'wpml-translation-management' ); ?>"
+		/>
+		<?php
+	}
 
     private function display_post_statuses_select() {
         $filter_post_status = isset( $this->translation_filter[ 'status' ] ) ? $this->translation_filter[ 'status' ]
