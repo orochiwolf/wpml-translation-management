@@ -14,6 +14,7 @@
 		print(TJ.status);
 	 } %>
 	</td>
+	<td class="deadline column-deadline"><%= TJ.deadline_date %></td>
 	<td class="translator column-translator"><%= TJ.translator_html %></td>
 
 </script>
