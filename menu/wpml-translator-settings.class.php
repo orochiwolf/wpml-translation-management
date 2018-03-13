@@ -258,18 +258,18 @@ class WPML_Translator_Settings {
                                         $tos = array();
                                         foreach ( $lp as $to => $null ) {
                                             if ( isset( $langs[ $to ] ) ) {
-                                                $tos[ ] = $langs[ $to ][ 'display_name' ];
+                                                $tos[ ] = esc_html( $langs[ $to ][ 'display_name' ] );
                                             } elseif ( $to ) {
                                                 $_lang = $this->sitepress->get_language_details( $to );
                                                 if ( $_lang ) {
-                                                    $tos[ ] = '<i>' . $_lang[ 'display_name' ] . __( ' (inactive)',
+                                                    $tos[ ] = '<i>' . esc_html( $_lang[ 'display_name' ] ) . __( ' (inactive)',
                                                                                                      'wpml-translation-management' ) . '</i>';
                                                 }
                                             }
                                         }
                                         ?>
-                                        <li><?php @printf( __( '%s to %s', 'wpml-translation-management' ),
-                                                           $langs[ $from ][ 'display_name' ],
+                                        <li><?php @printf( esc_html__( '%s to %s', 'wpml-translation-management' ),
+                                                           esc_html( $langs[ $from ][ 'display_name' ] ),
                                                            join( ', ', $tos ) ); ?></li>
                                     <?php endforeach; ?>
                                 </ul>
@@ -412,7 +412,7 @@ class WPML_Translator_Settings {
 
         if ( $action === 'add' && empty( $blog_users_nt ) ) {
             $alert_message = '<p>';
-            $alert_message .= __( 'All WordPress users are already translators. To add more translators, first create accounts for them.',
+            $alert_message .= esc_html__( 'All WordPress users are already translators. To add more translators, first create accounts for them.',
                                   'wpml-translation-management' );
             $alert_message .= '</p>';
             $return[ 'content' ] = '';
@@ -425,7 +425,7 @@ class WPML_Translator_Settings {
         }
 
         $output .= '<div id="icl_tm_add_user_errors">
-        <span class="icl_tm_no_to">' . __( 'Select user.', 'wpml-translation-management' ) . '</span>
+        <span class="icl_tm_no_to">' . esc_html__( 'Select user.', 'wpml-translation-management' ) . '</span>
     </div>
     <input type="hidden" name="icl_tm_action" value="' . $action . '_translator" />' . wp_nonce_field( $action . '_translator',
                                                                                                        $action . '_translator_nonce',
@@ -437,7 +437,7 @@ class WPML_Translator_Settings {
                                                                                                  'wpml-translation-management' ) . '" />';
             $output .= '&nbsp;<span id="icl_user_src_nf"></span>';
             $output .= '<img style="display:none;margin-left:3px;" src="' . esc_url( admin_url( 'images/wpspin_light.gif' ) ) . '" class="waiting" alt="" />';
-            $output .= '<p>' . __( 'To add translators, they must first have accounts in WordPress. Translators can have any editing privileges, including subscriber.' , 'wpml-translation-management' ) . '</p>';
+            $output .= '<p>' . esc_html__( 'To add translators, they must first have accounts in WordPress. Translators can have any editing privileges, including subscriber.' , 'wpml-translation-management' ) . '</p>';
         else:
             $output .=
                 '<span class="updated fade" style="padding:4px">'
@@ -471,13 +471,13 @@ class WPML_Translator_Settings {
                     $output .= ' checked="checked"';
                 endif;
                 $output .= ' />&nbsp;';
-                $output .= sprintf( __( 'From %s', 'wpml-translation-management' ), $from_lang[ 'display_name' ] ) . '</label>
+                $output .= sprintf( esc_html__( 'From %s', 'wpml-translation-management' ), esc_html( $from_lang[ 'display_name' ] ) ) . '</label>
               <div class="icl_tm_lang_pairs_to"';
                 if ( $selected_translator && 0 < @count( $selected_translator->language_pairs[ $from_lang[ 'code' ] ] ) ):
                     $output .= ' style="display:block"';
                 endif;
                 $output .= '>
-                  <small>' . __( 'to', 'wpml-translation-management' ) . '</small>
+                  <small>' . esc_html__( 'to', 'wpml-translation-management' ) . '</small>
                   <ul>';
 
                 foreach ( $languages as $to_lang ):
@@ -493,12 +493,12 @@ class WPML_Translator_Settings {
                         $output .= ' js-lang-pair-selected';
                     }
                     $output .= '">
-                      <label><input class="icl_tm_to_lang" type="checkbox" name="lang_pairs[' . $from_lang[ 'code' ] . '][' . $to_lang[ 'code' ] . ']" value="1"';
+                      <label><input class="icl_tm_to_lang" type="checkbox" name="lang_pairs[' . esc_attr( $from_lang[ 'code' ] ) . '][' . esc_attr( $to_lang[ 'code' ] ) . ']" value="1"';
                     if ( $lang_selected ) {
                         $output .= ' checked="checked"';
                     }
                     $output .= ' />&nbsp;';
-                    $output .= $to_lang[ 'display_name' ] . '</label>&nbsp;
+                    $output .= esc_html( $to_lang[ 'display_name' ] ) . '</label>&nbsp;
                       </li>';
                 endforeach;
                 $output .= '</ul>
@@ -513,7 +513,7 @@ class WPML_Translator_Settings {
                                 'wpml-translation-management' ) )
                 : esc_attr( __( 'Add as translator',
                                 'wpml-translation-management' ) );
-            $output .= '" />&nbsp;<input type="submit" value="' . __( 'Cancel',
+            $output .= '" />&nbsp;<input type="submit" value="' . esc_attr__( 'Cancel',
                                                                       'wpml-translation-management' ) . '" name="cancel" class="button-secondary" onclick="history.go(-1); return false;" />';
         }
         $return[ 'content' ] = $output;
