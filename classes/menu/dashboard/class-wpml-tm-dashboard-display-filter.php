@@ -38,9 +38,9 @@ class WPML_TM_Dashboard_Display_Filter {
                     $selected = 'selected="selected"';
                 }
                 ?>
-                <option value="<?php echo $lang[ 'code' ] ?>" <?php echo $selected; ?>>
+                <option value="<?php echo esc_attr( $lang[ 'code' ] ); ?>" <?php echo $selected; ?>>
                     <?php
-                    echo $lang[ 'display_name' ]; ?>
+                    echo esc_html( $lang[ 'display_name' ] ); ?>
                 </option>
             <?php
             }
@@ -60,8 +60,8 @@ class WPML_TM_Dashboard_Display_Filter {
             foreach ( $this->active_languages as $lang ) {
                 $selected = selected( $this->translation_filter[ 'to_lang' ], $lang[ 'code' ], false );
                 ?>
-                <option value="<?php echo $lang[ 'code' ] ?>" <?php echo $selected; ?>>
-                    <?php echo $lang[ 'display_name' ] ?>
+                <option value="<?php echo esc_attr( $lang[ 'code' ] ); ?>" <?php echo $selected; ?>>
+                    <?php echo esc_html( $lang[ 'display_name' ] ); ?>
                 </option>
             <?php
             }

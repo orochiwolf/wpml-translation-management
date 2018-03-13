@@ -77,7 +77,7 @@
 							_.each(TJ.languages, function (language_items, language) {
 							%>
 							<li>
-								<span class="value"><%= language_items.length %></span> <%= language %>
+								<span class="value"><%= language_items.length %></span> <%- language %>
 							</li>
 							<%
 							});

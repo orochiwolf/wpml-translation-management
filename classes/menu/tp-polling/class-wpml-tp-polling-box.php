@@ -27,13 +27,13 @@ class WPML_TP_Polling_Box {
 				</div>
 
                 <p><span id="icl_pickup_nof_jobs"></span> <input type="button" class="button-secondary"
-                          data-reloading-text="<?php _e( 'Reloading:',
+                          data-reloading-text="<?php esc_attr_e( 'Reloading:',
                               'wpml-translation-management' ) ?>" value=""
                           id="icl_tm_get_translations"/>
                     <span id="icl_pickup_last_pickup" class="wpml-tm-dashboard-last-pickup"></span>
                     <br />
                     <a href="<?php echo esc_attr( 'admin.php?page=' . WPML_TM_FOLDER . '/menu/main.php&sm=' . $logger_settings->get_ui_key() );?>">
-	                    <?php _e( 'Open the content updates log', 'wpml-translation-management' ); ?>
+	                    <?php esc_html_e( 'Open the content updates log', 'wpml-translation-management' ); ?>
                     </a>
 	                <?php
 	                if ( WP_DEBUG ) {
@@ -42,7 +42,7 @@ class WPML_TP_Polling_Box {
 				                                 href="<?php echo esc_attr( 'admin.php?page='
 		                                                            . WPML_TM_FOLDER
 		                                                            . '/menu/main.php&sm=com-log' ); ?>">
-			                <?php _e( 'Open the communication log', 'wpml-translation-management' ); ?>
+			                <?php esc_html_e( 'Open the communication log', 'wpml-translation-management' ); ?>
 			                </a>
 		                <?php
 	                }
