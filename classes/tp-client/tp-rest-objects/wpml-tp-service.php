@@ -120,7 +120,6 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 		parent::__construct( $object );
 		$this->set_custom_fields_data();
 		$this->set_requires_authentication();
-		$this->set_has_language_pairs();
 	}
 
 	/**
@@ -211,7 +210,7 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 	 * @return bool
 	 */
 	public function get_has_language_pairs() {
-		return $this->has_language_pairs;
+		return (bool) $this->has_language_pairs;
 	}
 
 	/**
@@ -311,14 +310,11 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 		$this->requires_authentication = (bool) $this->custom_fields;
 	}
 
-	public function set_has_language_pairs() {
-		global $sitepress;
-
-		$translation_service      = $sitepress->get_setting( 'translation_service' );
-		$this->has_language_pairs = $translation_service
-		                            && property_exists( $translation_service,
-		                                                'has_language_pairs' )
-		                            && $translation_service->has_language_pairs;
+	/**
+	 * @param bool $value
+	 */
+	public function set_has_language_pairs( $value  ) {
+		$this->has_language_pairs = (bool) $value;
 	}
 
 	/**

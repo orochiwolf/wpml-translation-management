@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb396051bde47d8e489723e9ce3c3c1c5
+class ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d
 {
     public static $files = array (
         'b45b351e6b6f7487d819961fef2fda77' => __DIR__ . '/..' . '/jakeasmith/http_build_url/src/http_build_url.php',
@@ -331,7 +331,6 @@ class ComposerStaticInitb396051bde47d8e489723e9ce3c3c1c5
         'WPML_TM_Word_Calculator_Post_Packages' => __DIR__ . '/../..' . '/classes/words-count/processor/calculator/post/wpml-tm-word-calculator-post-packages.php',
         'WPML_TM_Word_Count_Admin_Hooks' => __DIR__ . '/../..' . '/classes/words-count/hooks/wpml-tm-word-count-admin-hooks.php',
         'WPML_TM_Word_Count_Ajax_Hooks' => __DIR__ . '/../..' . '/classes/words-count/hooks/wpml-tm-word-count-ajax-hooks.php',
-        'WPML_TM_Word_Count_Async_Refresh' => __DIR__ . '/../..' . '/classes/words-count/queue/async-process/wpml-tm-word-count-async-refresh.php',
         'WPML_TM_Word_Count_Background_Process' => __DIR__ . '/../..' . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process.php',
         'WPML_TM_Word_Count_Background_Process_Factory' => __DIR__ . '/../..' . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process-factory.php',
         'WPML_TM_Word_Count_Background_Process_Requested_Types' => __DIR__ . '/../..' . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process-requested-types.php',
@@ -463,8 +462,8 @@ class ComposerStaticInitb396051bde47d8e489723e9ce3c3c1c5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInitb396051bde47d8e489723e9ce3c3c1c5::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb396051bde47d8e489723e9ce3c3c1c5::$classMap;
+            $loader->prefixesPsr0 = ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d::$classMap;
 
         }, null, ClassLoader::class);
     }
