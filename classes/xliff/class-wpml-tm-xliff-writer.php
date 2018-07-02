@@ -207,7 +207,7 @@ class WPML_TM_Xliff_Writer extends WPML_TM_Job_Factory_User {
 	 * @return string
 	 */
 	private function remove_etx_char( $string ) {
-		return preg_replace('/[\x03,\x05,\x11]/', '', $string);
+		return preg_replace('/[\x03\x05\x11]/', '', $string);
 	}
 
 	/**

@@ -128,7 +128,7 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 		$response_jobs = $response->jobs;
 		if ( $response_jobs ) {
 			if ( is_object( $response_jobs ) ) {
-				$response_jobs = json_decode( wp_json_encode( $response_jobs ), JSON_OBJECT_AS_ARRAY );
+				$response_jobs = json_decode( wp_json_encode( $response_jobs, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES ), JSON_OBJECT_AS_ARRAY );
 			}
 
 			foreach ( $response_jobs as $wpml_job_id => $ate_job_id ) {

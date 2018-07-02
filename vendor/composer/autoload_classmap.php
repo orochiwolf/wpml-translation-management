@@ -316,7 +316,6 @@ return array(
     'WPML_TM_Word_Calculator_Post_Packages' => $baseDir . '/classes/words-count/processor/calculator/post/wpml-tm-word-calculator-post-packages.php',
     'WPML_TM_Word_Count_Admin_Hooks' => $baseDir . '/classes/words-count/hooks/wpml-tm-word-count-admin-hooks.php',
     'WPML_TM_Word_Count_Ajax_Hooks' => $baseDir . '/classes/words-count/hooks/wpml-tm-word-count-ajax-hooks.php',
-    'WPML_TM_Word_Count_Async_Refresh' => $baseDir . '/classes/words-count/queue/async-process/wpml-tm-word-count-async-refresh.php',
     'WPML_TM_Word_Count_Background_Process' => $baseDir . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process.php',
     'WPML_TM_Word_Count_Background_Process_Factory' => $baseDir . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process-factory.php',
     'WPML_TM_Word_Count_Background_Process_Requested_Types' => $baseDir . '/classes/words-count/queue/background-process/wpml-tm-word-count-background-process-requested-types.php',
