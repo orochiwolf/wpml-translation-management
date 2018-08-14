@@ -215,7 +215,7 @@ class WPML_Save_Translation_Data_Action extends WPML_Translation_Job_Helper_With
 						stick_post( $new_post_id );
 					} else {
 						if ( $original_post->post_type == 'post' && ! is_null( $element_id ) ) {
-							unstick_post( $new_post_id ); //just in case - if this is an update and the original post stckiness has changed since the post was sent to translation
+							unstick_post( $new_post_id ); //just in case - if this is an update and the original post stickiness has changed since the post was sent for translation
 						}
 					}
 
