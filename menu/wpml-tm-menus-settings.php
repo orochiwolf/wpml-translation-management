@@ -207,6 +207,7 @@ class WPML_TM_Menus_Settings extends WPML_TM_Menus {
 								</label>
 							</p>
 						</div>
+						
 						<?php do_action( 'wpml_how_to_translate_posts_and_pages' ); ?>
 
 						<?php do_action( 'wpml_how_to_translate_posts_and_pages_below' ); ?>

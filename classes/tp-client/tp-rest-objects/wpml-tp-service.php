@@ -36,6 +36,11 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 	public $tms;
 
 	/**
+	 * @var bool
+	 */
+	public $partner;
+
+	/**
 	 * @var stdClass
 	 */
 	public $custom_fields;
@@ -162,6 +167,20 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 	 */
 	public function get_tms() {
 		return $this->tms;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_partner() {
+		return $this->partner;
+	}
+
+	/**
+	 * @param bool $partner
+	 */
+	public function set_partner( $partner ) {
+		$this->partner = $partner;
 	}
 
 	/**
@@ -621,6 +640,7 @@ class WPML_TP_Service extends WPML_TP_REST_Object implements Serializable {
 			'description'                    => 'description',
 			'doc_url'                        => 'doc_url',
 			'tms'                            => 'tms',
+			'partner'                        => 'partner',
 			'custom_fields'                  => 'custom_fields',
 			'custom_fields_data'             => 'custom_fields_data',
 			'requires_authentication'        => 'requires_authentication',

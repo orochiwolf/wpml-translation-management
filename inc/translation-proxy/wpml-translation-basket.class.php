@@ -100,14 +100,14 @@ class WPML_Translation_Basket {
 		$result              = array( 'modified' => false, 'valid' => true, 'message' => '', 'new_value' => '' );
 		$old_value           = $basket_name;
 		$basket_name         = strip_tags( $basket_name );
-		$result['new_value'] = $old_value !== $basket_name ? $basket_name : $result['new_value'];
 
 		if ( strlen( $basket_name ) > $basket_name_max_length ) {
-			$result['valid']   = false;
+			$result['valid']   = true;
 			$result['message'] = sprintf(
 				__( 'The length of the batch name exceeds the maximum length of %s', 'wpml-translation-management' ),
 				$basket_name_max_length
 			);
+			$result['new_value'] = $this->get_unique_basket_name( $basket_name, $basket_name_max_length );
 		} elseif ( $this->get_batch_id_from_name( $basket_name ) ) {
 			$result['valid']     = true;
 			$result['new_value'] = $this->get_unique_basket_name( $basket_name, $basket_name_max_length );

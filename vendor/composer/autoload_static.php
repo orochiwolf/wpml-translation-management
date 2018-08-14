@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d
+class ComposerStaticInita148d652e5f0bff9abc652f8cb7172e4
 {
     public static $files = array (
         'b45b351e6b6f7487d819961fef2fda77' => __DIR__ . '/..' . '/jakeasmith/http_build_url/src/http_build_url.php',
@@ -258,6 +258,9 @@ class ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d
         'WPML_TM_Resources_Factory' => __DIR__ . '/../..' . '/classes/class-wpml-tm-resources-factory.php',
         'WPML_TM_Scripts_Factory' => __DIR__ . '/../..' . '/classes/menu/class-wpml-tm-scripts-factory.php',
         'WPML_TM_Service_Activation_AJAX' => __DIR__ . '/../..' . '/classes/class-wpml-tm-service-activation-ajax.php',
+        'WPML_TM_Services_Layout_Template_Builder' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-services-layout-template-builder.php',
+        'WPML_TM_Services_List_Template' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-services-list-template.php',
+        'WPML_TM_Services_List_Template_Builder' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-services-list-template-builder.php',
         'WPML_TM_String' => __DIR__ . '/../..' . '/classes/words-count/class-wpml-tm-string.php',
         'WPML_TM_String_Basket_Request' => __DIR__ . '/../..' . '/classes/wpml-st/class-wpml-tm-string-basket-request.php',
         'WPML_TM_String_Xliff_Reader' => __DIR__ . '/../..' . '/classes/xliff/class-wpml-tm-string-xliff-reader.php',
@@ -291,7 +294,8 @@ class ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d
         'WPML_TM_Translation_Services_Admin_Section_No_Site_Key_Template' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-no-site-key-template.php',
         'WPML_TM_Translation_Services_Admin_Section_Resources' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-resources.php',
         'WPML_TM_Translation_Services_Admin_Section_Resources_Factory' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-resources-factory.php',
-        'WPML_TM_Translation_Services_Admin_Section_Services_List_Template' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-template.php',
+        'WPML_TM_Translation_Services_Admin_Section_Services_Layout_Template' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-services-layout-template.php',
+        'WPML_TM_Translation_Services_Admin_Section_Services_List_Model_Mapper' => __DIR__ . '/../..' . '/classes/menu/translation-services/class-wpml-tm-translation-services-admin-section-services-list-model-mapper.php',
         'WPML_TM_Translation_Services_Refresh' => __DIR__ . '/../..' . '/classes/menu/translation-services/troubleshooting/class-wpml-tm-translation-services-refresh.php',
         'WPML_TM_Translation_Services_Refresh_Services_Factory' => __DIR__ . '/../..' . '/classes/menu/translation-services/troubleshooting/class-wpml-tm-translation-services-refresh-services-factory.php',
         'WPML_TM_Translation_Status' => __DIR__ . '/../..' . '/classes/filters/class-wpml-tm-translation-status.php',
@@ -462,8 +466,8 @@ class ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit3d3dc4902306d7d20b075c3b5fea750d::$classMap;
+            $loader->prefixesPsr0 = ComposerStaticInita148d652e5f0bff9abc652f8cb7172e4::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInita148d652e5f0bff9abc652f8cb7172e4::$classMap;
 
         }, null, ClassLoader::class);
     }
