@@ -95,7 +95,7 @@ class WPML_TM_Wizard_Translation_Editor_Step extends WPML_Twig_Template_Loader {
 				array(
 					array(
 						'type'  => 'text',
-						'value' => __( '* The Advanced Translation Editor is free now. When it goes out of beta, it will cost a small fee per user.' ),
+						'value' => __( '* The Advanced Translation Editor is free now. When it goes out of beta, it will cost a small fee per user.', 'wpml-translation-management' ),
 					),
 					array(
 						'type'     => 'link',
