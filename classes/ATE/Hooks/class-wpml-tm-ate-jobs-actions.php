@@ -31,14 +31,16 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 	 * @var WPML_Current_Screen
 	 */
 	private $current_screen;
+	private $trid_original_element_map = array();
 
 	/**
 	 * WPML_TM_ATE_Jobs_Actions constructor.
 	 *
-	 * @param WPML_TM_ATE_API $ate_api
-	 * @param WPML_TM_ATE_Jobs $ate_jobs
-	 * @param SitePress $sitepress
-	 * @param WPML_Current_Screen $current_screen
+	 * @param \WPML_TM_ATE_API                           $ate_api
+	 * @param \WPML_TM_ATE_Jobs                          $ate_jobs
+	 * @param \SitePress                                 $sitepress
+	 * @param \WPML_Current_Screen                       $current_screen
+	 * @param \WPML_TM_AMS_Translator_Activation_Records $translator_activation_records
 	 */
 	public function __construct(
 		WPML_TM_ATE_API $ate_api,
@@ -128,7 +130,7 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 		$response_jobs = $response->jobs;
 		if ( $response_jobs ) {
 			if ( is_object( $response_jobs ) ) {
-				$response_jobs = json_decode( wp_json_encode( $response_jobs, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES ), JSON_OBJECT_AS_ARRAY );
+				$response_jobs = json_decode( wp_json_encode( $response_jobs, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES ), true );
 			}
 
 			foreach ( $response_jobs as $wpml_job_id => $ate_job_id ) {
@@ -379,9 +381,7 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 		if ( $posts ) {
 			$tm_core          = wpml_load_core_tm();
 			$languages        = $this->sitepress->get_active_languages();
-			$default_language = $this->sitepress->get_default_language();
 
-			unset( $languages[ $default_language ] );
 			$languages_codes      = array_keys( $languages );
 
 			/** @var WP_Post|stdClass $post */
@@ -389,9 +389,10 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 				$post = $this->get_wp_post( $post );
 
 				if ( $post ) {
+					$trid             = $this->sitepress->get_element_trid( $post->ID, 'post_' . $post->post_type );
+					$original_element = $this->get_original_element( $trid, 'post_' . $post->post_type );
 
-					$trid = $this->sitepress->get_element_trid( $post->ID, 'post_' . $post->post_type );
-					if ( $trid ) {
+					if ( $trid && $original_element && (int) $original_element->element_id === $post->ID ) {
 						foreach ( $languages_codes as $language_code ) {
 							$job_id = $tm_core->get_translation_job_id( $trid, $language_code );
 							if ( $job_id ) {
@@ -449,5 +450,24 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 	private function is_edit_page_of_a_translatable_type() {
 		return $this->current_screen->is_edit_post()
 		       && $this->sitepress->is_translated_post_type( $this->current_screen->get_post_type() );
+	}
+
+	/**
+	 * @param int    $trid
+	 * @param string $element_type
+	 *
+	 * @return mixed
+	 */
+	private function get_original_element( $trid, $element_type ) {
+		if ( ! array_key_exists( $trid, $this->trid_original_element_map ) ) {
+			$element_translation = $this->sitepress->get_original_element_translation( $trid, $element_type );
+			if ( $element_translation ) {
+				$this->trid_original_element_map[ $trid ] = $element_translation;
+
+				return $element_translation;
+			}
+		}
+
+		return $this->trid_original_element_map[ $trid ];
 	}
 }
