@@ -8,6 +8,9 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 	const RESPONSE_ATE_DUPLICATED_SOURCE_ID = 417;
 	const RESPONSE_ATE_UNEXPECTED_ERROR = 500;
 
+	const RESPONSE_ATE_ERROR_NOTICE_ID = 'ate-update-error';
+	const RESPONSE_ATE_ERROR_NOTICE_GROUP = 'default';
+
 	/**
 	 * @var WPML_TM_ATE_API
 	 */
@@ -275,6 +278,26 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 	}
 
 	/**
+	 * @param string $message
+	 */
+	private function add_update_error_notice( $message ) {
+		$wpml_admin_notices = wpml_get_admin_notices();
+
+		$notice = new WPML_Notice(
+			self::RESPONSE_ATE_ERROR_NOTICE_ID,
+			sprintf(
+				__( 'There was a problem communicating with ATE: %s ', 'wpml-translation-management' ),
+				'(<i>' . $message . '</i>)'
+			),
+			self::RESPONSE_ATE_ERROR_NOTICE_GROUP
+		);
+		$notice->set_css_class_types( array( 'warning' ) );
+		$notice->add_capability_check( array( 'manage_options', 'wpml_manage_translation_management' ) );
+		$notice->set_flash();
+		$wpml_admin_notices->add_notice( $notice );
+	}
+
+	/**
 	 * @param bool           $updated
 	 * @param array|stdClass $translation_jobs
 	 * @param bool           $ignore_errors
@@ -318,7 +341,11 @@ class WPML_TM_ATE_Jobs_Actions implements IWPML_Action {
 				$ate_job_ids = array_keys( $job_ids_map );
 				$response    = $this->ate_api->get_non_delivered_ate_jobs( $ate_job_ids );
 
-				$this->check_response_error( $response );
+				try {
+					$this->check_response_error( $response );
+				} catch( RuntimeException $e ){
+					$this->add_update_error_notice( $e->getMessage() );
+				}
 
 				$processed = json_decode( wp_json_encode( $response ), true );
 
