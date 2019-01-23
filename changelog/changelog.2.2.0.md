@@ -1,14 +1,14 @@
 # Features
-* [wpmltm-1189] Implement new design for translation editor.
+* [wpmltm-1391] The date in "Last time translations were picked up" now displays the actual time stamp of the last pickup
 * [wpmltm-1179] Translation Management now logs messages exchanged with the translation service
 * [wpmltm-1094] Add ability to set the 'field type' to wpml-config.xml filter
-* [wpmlcore-2774] Implement new design for taxonomy translation.
-* [wpmlcore-2773] Added ability to export all/filtered jobs in WPML -> Translations (Translations Queue)
 
 # Fixes
 * [wpmltm-1442] Improved feedback message when sending jobs to a translation service fails
 * [wpmltm-1408] Improved the admin notice when the XLIFF is missing the `target` element, or the element is empty
-* [wpmltm-1391] The date in "Last time translations were picked up" now displays the actual time stamp of the last pickup
+* [wpmltm-1401] Fixed caching issue on WP-Engine when new terms are created.
+* [wpmltm-1400] Fixed issue when translation job wrongly updated when sending batch failed.
+* [wpmltm-1395] Fixed creation of slug when "Copy from original language if translation language uses encoded URLs" is selected.
 * [wpmltm-1390] Don't display the export XLIFF section on the Translations Queue page when the user doesn't have any translation languages
 * [wpmltm-1351] Fixed `\WPML_Admin_Post_Actions::get_trid_from_referer`function to get trid form refferer only if needed
 * [wpmltm-1343] Keep translation status when it's updated.
@@ -17,6 +17,3 @@
 * [wpmltm-1212] Fixed wrong post edit link for translator when lang_from and lang_to are equals
 * [wpmltm-1160] Fix links to translation editor.
 * [wpmltm-1134] The upper "Apply" button in WPML -> Translations (Translations Queue) now works as expected
-* [wpmlcore-2988] Removed unneeded dependencies checks in admin pages: this now runs only once and later only when activating/deactivating plugins
-* [wpmlcore-2988] Removed unneeded dependencies checks in admin pages: this now runs only once and later only when activating/deactivating plugins
-* [wpmlcore-2899] Replaced use of `$HTTP_RAW_POST_DATA` with `php://input`
