@@ -11,3 +11,4 @@
 * [wpmltm-2912] Fixed the word count for strings containing URLs
 * [wpmltm-2891] Added fix allowing translation managers to de-activate a translation service preselected as preferred in wpml.org
 * [wpmltm-2825] Improved the basket notice with a "done" button redirecting to the dashboard (instead of an automatic redirection)
+* [wpmltm-2135] Adjust wording on completed jobs notification setting
