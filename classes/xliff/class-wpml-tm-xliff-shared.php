@@ -123,6 +123,17 @@ abstract class WPML_TM_Xliff_Shared extends WPML_TM_Job_Factory_User {
 		return $data;
 	}
 
+	/**
+	 * Validate XLIFF target on reading XLIFF.
+	 *
+	 * @param $target string
+	 *
+	 * @return bool
+	 */
+	private function is_valid_target( $target ) {
+		return $target || '0' === $target;
+	}
+
 	protected function validate_file( $name, $content, $current_user ) {
 		$xml = $this->check_xml_file( $name, $content );
 
