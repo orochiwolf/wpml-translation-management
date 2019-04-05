@@ -65,10 +65,12 @@ class WPML_TM_XLIFF {
 		if ( $args ) {
 			$phase_items = array();
 			foreach ( $args as $name => $data ) {
-				if ( $name
-				     && array_key_exists( 'process-name', $data )
-				     && array_key_exists( 'note', $data )
-				     && $data['note'] ) {
+				if (
+					$name
+					&& array_key_exists( 'process-name', $data )
+					&& array_key_exists( 'note', $data )
+					&& $data['note']
+				) {
 
 					$phase = $this->dom->createElement( 'phase' );
 					$phase->setAttribute( 'phase-name', $name );
@@ -117,12 +119,17 @@ class WPML_TM_XLIFF {
 		return $this;
 	}
 
+	// phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+
 	/**
-	 * @param array $trans_units
+	 * Set translation units for xliff.
+	 *
+	 * @param array $trans_units Translation units.
 	 *
 	 * @return $this
 	 */
 	public function setTranslationUnits( $trans_units ) {
+		// phpcs:enable
 		if ( $trans_units ) {
 			foreach ( $trans_units as $trans_unit ) {
 				$trans_unit_element = $this->dom->createElement( 'trans-unit' );
@@ -133,6 +140,14 @@ class WPML_TM_XLIFF {
 				}
 				$this->appendData( 'source', $trans_unit, $trans_unit_element );
 				$this->appendData( 'target', $trans_unit, $trans_unit_element );
+
+				if ( $trans_unit['note']['content'] ) {
+					$note = $this->dom->createElement( 'note' );
+					// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					$note->nodeValue = 'wrap_tag:' . $trans_unit['note']['content'];
+					// phpcs:enable
+					$trans_unit_element->appendChild( $note );
+				}
 
 				$this->trans_units[] = $trans_unit_element;
 			}
